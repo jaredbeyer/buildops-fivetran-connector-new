@@ -90,33 +90,4 @@ class BuildOpsConnector(Connector):
         for endpoint, table_name in endpoints:
             data = self.fetch_paginated_data(endpoint)
             for record in data:
-                flattened_record = self.flatten_record(record, table_name)
-                self.write(table_name, flattened_record)
-
-        return context.get_state()  # Return current state (full sync for now)
-
-    def write(self, table_name, record):
-        """Write record to Fivetran output."""
-        self.output.write({
-            "schema": "public",
-            "table": table_name,
-            "data": [record]
-        })
-
-@app.route('/sync', methods=['POST'])
-def handle_sync():
-    """Handle Fivetran's HTTP request with Basic Authentication."""
-    auth = request.authorization
-    if not auth or auth.username != "ft_pAb2Uzjbw4SKH" or auth.password != "QyskwxJ5XvewqnrxYpq0OVOsrQP7faZC":
-        return {"error": "Unauthorized"}, 401
-    config = {
-        "client_id": os.environ.get("BUILDOPS_CLIENT_ID"),
-        "client_secret": os.environ.get("BUILDOPS_CLIENT_SECRET"),
-        "tenant_id": os.environ.get("BUILDOPS_TENANT_ID")
-    }
-    connector = BuildOpsConnector(config)
-    state = connector.sync({})
-    return {"status": "success", "state": state}
-
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
+                flattened_record = self.flatten_record(record
