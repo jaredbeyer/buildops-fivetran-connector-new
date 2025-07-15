@@ -1,4 +1,4 @@
-from fivetran_connector_sdk import Connector, State
+from fivetran_connector_sdk import Connector
 import requests
 import json
 import time
@@ -79,7 +79,7 @@ class BuildOpsConnector(Connector):
             })
         return flattened
 
-    def sync(self, state: State) -> State:
+    def sync(self, context):
         """Sync data from BuildOps API."""
         endpoints = [
             ("/v1/customers", "customers"),
@@ -93,7 +93,7 @@ class BuildOpsConnector(Connector):
                 flattened_record = self.flatten_record(record, table_name)
                 self.write(table_name, flattened_record)
 
-        return state
+        return context.get_state()  # Return current state (full sync for now)
 
     def write(self, table_name, record):
         """Write record to Fivetran output."""
@@ -115,9 +115,8 @@ def handle_sync():
         "tenant_id": os.environ.get("BUILDOPS_TENANT_ID")
     }
     connector = BuildOpsConnector(config)
-    state = State()
-    connector.sync(state)
-    return {"status": "success"}
+    state = connector.sync({})
+    return {"status": "success", "state": state}
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
