@@ -12,7 +12,8 @@ logging.basicConfig(level=logging.INFO)
 
 class BuildOpsConnector(Connector):
     def __init__(self, config):
-        super().__init__(service="buildops_custom", config=config)
+        # Fixed: removed `service=` from super().__init__()
+        super().__init__(config)
         self.base_url = "https://api.buildops.com"
         self.token = None
         self.token_expiry = None
