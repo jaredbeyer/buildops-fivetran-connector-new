@@ -23,5 +23,5 @@ jobs:
           pip install --upgrade pip
           pip install fivetran-sdk
 
-          # Run registration from inside the venv
+          # Run registration command in venv
           python -m fivetran_sdk register --url https://buildops-fivetran-connector-9d79b4a55b86.herokuapp.com/sync
