@@ -1,7 +1,7 @@
 name: Register Fivetran Connector
 
 on:
-  workflow_dispatch:  # run manually from GitHub UI
+  workflow_dispatch:
 
 jobs:
   register:
@@ -16,12 +16,12 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: Create virtual environment & install SDK
+      - name: Install SDK and register connector
         run: |
           python -m venv venv
           source venv/bin/activate
           pip install --upgrade pip
           pip install fivetran-sdk
 
-          # Run registration from inside venv
+          # Run registration from inside the venv
           python -m fivetran_sdk register --url https://buildops-fivetran-connector-9d79b4a55b86.herokuapp.com/sync
