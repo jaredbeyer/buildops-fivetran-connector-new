@@ -17,6 +17,7 @@ class buildopsconnector(Connector):
         self.base_url = "https://api.buildops.com"
         self.token = None
         self.token_expiry = None
+        self.config = config  # FIX: ensure self.config is set!
 
     def authenticate(self):
         if not self.token or datetime.utcnow().timestamp() >= self.token_expiry:
