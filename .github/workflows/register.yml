@@ -8,32 +8,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.9"
-
-      - name: Create virtual environment
-        run: python -m venv venv
-
-      - name: Activate venv, install fivetran-sdk, and debug
-        run: |
-          source venv/bin/activate
-          python -m pip install --upgrade pip
-          python -m pip install fivetran-sdk
-
-          echo "🧪 Debug: Which Python?"
-          which python
-          echo "🧪 Debug: Installed packages"
-          python -m pip list
-
-      - name: Register Fivetran Connector
+      - name: Register Fivetran Connector in virtualenv
         env:
           CONNECTOR_URL: ${{ secrets.CONNECTOR_URL }}
         run: |
+          echo "🐍 Setting up virtual environment..."
+          python3 -m venv venv
           source venv/bin/activate
-          echo "🚀 Running fivetran_sdk register"
+
+          echo "⬆️ Upgrading pip..."
+          python -m pip install --upgrade pip
+
+          echo "📦 Installing fivetran-sdk..."
+          python -m pip install fivetran-sdk
+
+          echo "🧪 Verifying installation..."
+          python -m pip list
+
+          echo "🚀 Registering connector..."
           python -m fivetran_sdk register --url $CONNECTOR_URL
