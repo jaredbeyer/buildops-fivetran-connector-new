@@ -1,0 +1,39 @@
+name: Register Fivetran Connector
+
+on:
+  workflow_dispatch:
+
+jobs:
+  register-connector:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: Create virtual environment
+        run: python -m venv venv
+
+      - name: Activate venv, install fivetran-sdk, and debug
+        run: |
+          source venv/bin/activate
+          python -m pip install --upgrade pip
+          python -m pip install fivetran-sdk
+
+          echo "🧪 Debug: Which Python?"
+          which python
+          echo "🧪 Debug: Installed packages"
+          python -m pip list
+
+      - name: Register Fivetran Connector
+        env:
+          CONNECTOR_URL: ${{ secrets.CONNECTOR_URL }}
+        run: |
+          source venv/bin/activate
+          echo "🚀 Running fivetran_sdk register"
+          python -m fivetran_sdk register --url $CONNECTOR_URL
