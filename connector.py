@@ -10,7 +10,7 @@ from flask import Flask, request
 app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
 
-class BuildOpsConnector(Connector):
+class buildopsconnector(Connector):
     def __init__(self, config):
         # Fixed: removed `service=` from super().__init__()
         super().__init__(config)
