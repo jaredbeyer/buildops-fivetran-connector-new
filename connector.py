@@ -132,7 +132,7 @@ def handle_sync():
             "tenant_id": os.environ.get("BUILDOPS_TENANT_ID")
         }
 
-        connector = BuildOpsConnector(config)
+        connector = buildopsconnector(config)
         state = connector.sync({})
         return {"status": "success", "state": state}
 
